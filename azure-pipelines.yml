@@ -1,0 +1,37 @@
+trigger:
+  branches:
+    include:
+      - main   # o master, según tu rama principal
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  FTP_HOST: 'itinetravel-auth-service-f4gfctdscrh6gjhm.scm.westus3-01.azurewebsites.windows.net'
+  FTP_USERNAME: 'ItineTravel-auth-service\$ItineTravel-auth-service'
+  FTP_PASSWORD: $(FTP_PASSWORD)
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    options: '-DskipTests'   # opcional, si quieres saltar tests
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'target/*.jar'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: 'ftp://$(FTP_HOST)/site/wwwroot'
+    username: '$(FTP_USERNAME)'
+    password: '$(FTP_PASSWORD)'
+    rootDirectory: 'target'      # Carpeta donde está el JAR
+    filePatterns: '*.jar'        # Archivos a subir
+    remoteDirectory: '/'         # Carpeta remota en la Web App
+    clean: true                  # Borra contenido remoto antes de subir
+    passive: true                # FTPS Passive mode
