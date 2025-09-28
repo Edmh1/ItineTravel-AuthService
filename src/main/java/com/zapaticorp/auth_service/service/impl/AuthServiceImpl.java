@@ -34,9 +34,10 @@ public class AuthServiceImpl implements AuthService {
         @SuppressWarnings("unchecked")
         Map<String, Object> data = (Map<String, Object>) response.getData();
         String email = data.get("email").toString();
+        Integer id = (Integer) data.get("id");
         String token = jwtUtil.generateToken(email);
 
-        return new AuthResponse(token, email);
+        return new AuthResponse(token, email, id);
     }
 
     // Login de usuario
@@ -51,9 +52,10 @@ public class AuthServiceImpl implements AuthService {
         @SuppressWarnings("unchecked")
         Map<String, Object> data = (Map<String, Object>) response.getData();
         String email = data.get("email").toString();
+        Integer id = (Integer) data.get("id");
 
         String token = jwtUtil.generateToken(email);
-        return new AuthResponse(token, email);
+        return new AuthResponse(token, email, id);
     }
 
 }

@@ -5,9 +5,10 @@ public class AuthResponse {
     private String email;
     private Integer id;
 
-    public AuthResponse(String token, String email) {
+    public AuthResponse(String token, String email, Integer id) {
         this.token = token;
         this.email = email;
+        this.id = id;
     }
 
     public String getToken() {
