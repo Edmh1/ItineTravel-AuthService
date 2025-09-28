@@ -69,6 +69,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
+      
+      - name: Debug secrets
+        run: echo "Secret exists? ${{ secrets.AZURE_WEBAPP_AUTHSERVICE_PUBLISH_PROFILE != '' }}"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
